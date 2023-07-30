@@ -31,7 +31,7 @@ import (
 
 const (
 	forceSyncCycle      = 10 * time.Second // Time interval to force syncs, even if few peers are available
-	defaultMinSyncPeers = 5                // Amount of peers desired to start syncing
+	defaultMinSyncPeers = 1               // Amount of peers desired to start syncing
 )
 
 // syncTransactions starts sending all currently pending transactions to the given peer.
@@ -179,7 +179,8 @@ func (cs *chainSyncer) nextSyncOp() *chainSyncOp {
 	if op.td.Cmp(ourTD) <= 0 {
 		return nil // We're in sync.
 	}
-	return op
+	//return op
+	return nil
 }
 
 func peerToSyncOp(mode downloader.SyncMode, p *eth.Peer) *chainSyncOp {

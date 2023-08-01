@@ -131,18 +131,20 @@ func (h *ethHandler) handleBlockBroadcast(peer *eth.Peer, block *types.Block, td
 		// return errors.New("unexpected block announces")
 	}
 	// Schedule the block for import
+	fmt.Printf("New block broadcast %v",block.Number())
 	h.blockFetcher.Enqueue(peer.ID(), block)
 
 	// Assuming the block is importable by the peer, but possibly not yet done so,
 	// calculate the head hash and TD that the peer truly must have.
-	var (
-		trueHead = block.ParentHash()
-		trueTD   = new(big.Int).Sub(td, block.Difficulty())
-	)
-	// Update the peer's total difficulty if better than the previous
-	if _, td := peer.Head(); trueTD.Cmp(td) > 0 {
-		peer.SetHead(trueHead, trueTD)
-		h.chainSync.handlePeerEvent(peer)
-	}
+	// var (
+	// 	trueHead = block.ParentHash()
+	// 	trueTD   = new(big.Int).Sub(td, block.Difficulty())
+	// )
+	// // Update the peer's total difficulty if better than the previous
+	// if _, td := peer.Head(); trueTD.Cmp(td) > 0 {
+	// 	fmt.Println("--- handle block broadcast from peer "+peer.Fullname())
+	// 	peer.SetHead(trueHead, trueTD)
+	// 	h.chainSync.handlePeerEvent(peer)
+	// }
 	return nil
 }
